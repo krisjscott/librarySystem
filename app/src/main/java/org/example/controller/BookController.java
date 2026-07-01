@@ -51,7 +51,7 @@ public class BookController {
     }
 
     @PutMapping("/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ResponseStatus(HttpStatus.CREATED)
     public book updateBook(@RequestBody book bk, @PathVariable Long id) {
         if(!id.equals(bk.getId())) {
             throw new BookIdMismatchException();
