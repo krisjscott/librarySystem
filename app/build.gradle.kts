@@ -32,6 +32,7 @@ dependencies {
     runtimeOnly ("com.mysql:mysql-connector-j")
     implementation("org.springframework.boot:spring-boot-starter-security")
     implementation("io.rest-assured:rest-assured:5.5.5")
+    developmentOnly ("org.springframework.boot:spring-boot-devtools")
 
 }
 
