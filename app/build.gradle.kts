@@ -29,6 +29,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     runtimeOnly("com.h2database:h2")
+    runtimeOnly ("com.mysql:mysql-connector-j")
     implementation("org.springframework.boot:spring-boot-starter-security")
     implementation("io.rest-assured:rest-assured:5.5.5")
 
