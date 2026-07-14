@@ -34,6 +34,9 @@ dependencies {
     implementation("io.rest-assured:rest-assured:5.5.5")
     developmentOnly ("org.springframework.boot:spring-boot-devtools")
 
+    compileOnly("org.projectlombok:lombok:1.18.30")
+    annotationProcessor("org.projectlombok:lombok:1.18.30")
+
 }
 
 // Apply a specific Java toolchain to ease working on different environments.
