@@ -6,8 +6,6 @@ import org.example.Service.BookService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
-
 @RestController
 @RequestMapping("/api/books")
 public class BookController {
@@ -24,13 +22,13 @@ public class BookController {
     }
 
     @GetMapping("/title/{bookTitle}")
-    public Optional<Book> findByTitle(@PathVariable String bookTitle) {
+    public Book findByTitle(@PathVariable String bookTitle) {
         return bookService.findByTitle(bookTitle);
     }
 
     @GetMapping("/author/{author}")
     public Book findByAuthor(@PathVariable String author) {
-        return bookService.findByAuthor(author);
+        return bookService.findBookByAuthor(author);
     }
 
     @GetMapping("/{id}")

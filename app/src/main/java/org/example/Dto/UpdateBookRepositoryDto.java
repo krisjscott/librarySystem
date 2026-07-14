@@ -2,22 +2,22 @@ package org.example.Dto;
 
 public class UpdateBookRepositoryDto {
     private Long id;
-    private String name;
+    private String title;
     private String author;
 
     public UpdateBookRepositoryDto() {}
 
-    public UpdateBookRepositoryDto(Long id, String name, String author) {
+    public UpdateBookRepositoryDto(Long id, String title, String author) {
         this.id = id;
-        this.name = name;
+        this.title = title;
         this.author = author;
     }
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
+    public String getTitle() { return title; }
+    public void setTitle(String title) { this.title = title; }
 
     public String getAuthor() { return author; }
     public void setAuthor(String author) { this.author = author; }

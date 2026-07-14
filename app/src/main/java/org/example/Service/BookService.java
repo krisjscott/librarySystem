@@ -9,7 +9,6 @@ import org.example.Repository.BookRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 @Service
 public class BookService {
@@ -29,22 +28,19 @@ public class BookService {
                 .orElseThrow(() -> new BookNotFoundException("No book found with id: " + id));
     }
 
-    public Optional<Book> findByTitle(String title) {
-        Optional<Book> found = bookRepository.findByBookName(title);
-        if (found == null) {
-            throw new BookNotFoundException("No book available for: " + title);
+    public Book findBookByAuthor(String author) {
+        Book value = bookRepository.findByAuthor(author);
+        if(value == null ) {
+            throw new BookNotFoundException("No book found with author: " + author);
         }
-        return found;
-    }
-
-    public Book findByAuthor(String author) {
-        return bookRepository.findByAuthor(author)
-                .orElseThrow(() -> new BookNotFoundException("No books by " + author));
+        else {
+            return value;
+        }
     }
 
     public CreateBookRepositoryDto create(CreateBookRepositoryDto dto) {
-        if (bookRepository.existsByName(dto.getName())) {
-            throw new DuplicateResouceException("Book already exists with name: " + dto.getName());
+        if (bookRepository.existsByTitle(dto.getTitle())) {
+            throw new DuplicateResouceException("Book already exists with name: " + dto.getTitle());
         }
         Book saved = bookRepository.save(mapToEntity(dto));
         return mapToDto(saved);
@@ -57,9 +53,6 @@ public class BookService {
     }
 
     public Book update(Long id, Book bk) {
-        if (!id.equals(bk.getId())) {
-            throw new BookIdMismatchException();
-        }
         bookRepository.findById(id)
                 .orElseThrow(() -> new BookNotFoundException("No book found with id: " + id));
         return bookRepository.save(bk);
@@ -68,13 +61,21 @@ public class BookService {
     private Book mapToEntity(CreateBookRepositoryDto dto) {
         Book book = new Book();
         book.setId(dto.getId());
-        book.setName(dto.getName());
+        book.setTitle(dto.getTitle());
         book.setAuthor(dto.getAuthor());
         book.createAt(LocalDateTime.now());
         return book;
     }
 
+    public Book findByTitle(String title) {
+        Book found = bookRepository.findByTitle(title);
+        if (found == null) {
+            throw new BookNotFoundException("No book available for: " + title);
+        }
+        return found;
+    }
+
     private CreateBookRepositoryDto mapToDto(Book book) {
-        return new CreateBookRepositoryDto(book.getId(), book.getName(), book.getAuthor());
+        return new CreateBookRepositoryDto(book.getId(), book.getTitle(), book.getAuthor());
     }
 }
