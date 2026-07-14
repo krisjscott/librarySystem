@@ -2,9 +2,11 @@ package org.example.Model;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
+
 
 @Entity
-public class book {
+public class Book {
 
     @Id
 //    @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,7 +18,10 @@ public class book {
     @Column(nullable = false)
     private String author;
 
-    public book() {}
+    @Column
+    private LocalDateTime createdAt;
+
+    public Book() {}
 
     public Long getId() { return this.id; }
     public void setId(Long id) { this.id = id; }
@@ -27,5 +32,7 @@ public class book {
     public String getAuthor() { return this.author; }
     public void setAuthor(String author) { this.author = author; }
 
-    public String getTitle() { return this.name; }
+    public void createAt(LocalDateTime now) {
+        this.createdAt = now;
+    }
 }
