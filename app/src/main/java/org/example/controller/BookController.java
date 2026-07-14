@@ -1,74 +1,58 @@
 package org.example.controller;
 
-import org.example.ErrorHandling.UserNotFoundException;
-import org.example.Repository.BookRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.example.Dto.CreateBookRepositoryDto;
+import org.example.Model.Book;
+import org.example.Service.BookService;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
-import org.example.ErrorHandling.BookNotFoundException;
-import org.example.ErrorHandling.BookIdMismatchException;
 
-
-import org.example.Model.book;
-
-import java.util.Collections;
-import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/books")
 public class BookController {
 
-    @Autowired
-    private BookRepository bookRepository;
+    private final BookService bookService;
+
+    public BookController(BookService bookService) {
+        this.bookService = bookService;
+    }
 
     @GetMapping
-    public Iterable findAll() {
-        return bookRepository.findAll();
+    public Iterable<Book> findAll() {
+        return bookService.findAll();
     }
 
     @GetMapping("/title/{bookTitle}")
-    public book findByTitle(@PathVariable String bookTitle) {
-
-        if(bookRepository.findByTitle(bookTitle) == null || bookRepository.findByName(bookTitle) == null) {
-            throw new BookNotFoundException("No Book available for: "+ bookTitle);
-        }
-        return bookRepository.findByTitle(bookTitle);
+    public Optional<Book> findByTitle(@PathVariable String bookTitle) {
+        return bookService.findByTitle(bookTitle);
     }
 
-    @GetMapping("/author/{author}") //add exception for this too
-    public List findByAuthor(@PathVariable String author) {
-        return bookRepository.findByAuthor(author);
+    @GetMapping("/author/{author}")
+    public Book findByAuthor(@PathVariable String author) {
+        return bookService.findByAuthor(author);
     }
 
     @GetMapping("/{id}")
-    public book findById(@PathVariable Long id) {
-        return bookRepository.findById(id)
-                .orElseThrow(()-> new BookNotFoundException("No book found"));
+    public Book findById(@PathVariable Long id) {
+        return bookService.findById(id);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public book create(@RequestBody book bk) {
-        return bookRepository.save(bk);
+    public CreateBookRepositoryDto create(@RequestBody CreateBookRepositoryDto dto) {
+        return bookService.create(dto);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Long id) {
-        bookRepository.findById(id)
-                .orElseThrow(()->new BookNotFoundException("Book was never created with id: "+id));
-        bookRepository.deleteById(id);
+        bookService.delete(id);
     }
 
     @PutMapping("/{id}")
-    @ResponseStatus(HttpStatus.CREATED)
-    public book updateBook(@RequestBody book bk, @PathVariable Long id) {
-        if(!id.equals(bk.getId())) {
-            throw new BookIdMismatchException();
-        }
-        bookRepository.findById(id)
-                .orElseThrow(()-> new BookNotFoundException("No book was found"));
-        return bookRepository.save(bk);
+    @ResponseStatus(HttpStatus.OK)
+    public Book updateBook(@RequestBody Book bk, @PathVariable Long id) {
+        return bookService.update(id, bk);
     }
 }
