@@ -1,10 +1,10 @@
 package org.example.Service;
 
 import org.example.Dto.CreateBookRepositoryDto;
-import org.example.ErrorHandling.BookIdMismatchException;
+import org.example.ErrorHandling.BookIdMissingException;
 import org.example.ErrorHandling.BookNotFoundException;
-import org.example.ErrorHandling.DuplicateResouceException;
-import org.example.Model.Book;
+import org.example.ErrorHandling.DuplicateResourceException;
+import org.example.Entity.Book;
 import org.example.Repository.BookRepository;
 import org.springframework.stereotype.Service;
 
@@ -28,10 +28,14 @@ public class BookService {
                 .orElseThrow(() -> new BookNotFoundException("No book found with id: " + id));
     }
 
+    public Boolean ifIssued(String title){
+        return bookRepository.ifIssuedOrNot(title);
+    }
+
     public Book findBookByAuthor(String author) {
         Book value = bookRepository.findByAuthor(author);
         if(value == null ) {
-            throw new BookNotFoundException("No book found with author: " + author);
+            throw new BookIdMissingException("Value is missing");
         }
         else {
             return value;
@@ -40,7 +44,7 @@ public class BookService {
 
     public CreateBookRepositoryDto create(CreateBookRepositoryDto dto) {
         if (bookRepository.existsByTitle(dto.getTitle())) {
-            throw new DuplicateResouceException("Book already exists with name: " + dto.getTitle());
+            throw new DuplicateResourceException("Book already exists with name: " + dto.getTitle());
         }
         Book saved = bookRepository.save(mapToEntity(dto));
         return mapToDto(saved);
@@ -60,9 +64,9 @@ public class BookService {
 
     private Book mapToEntity(CreateBookRepositoryDto dto) {
         Book book = new Book();
-        book.setId(dto.getId());
         book.setTitle(dto.getTitle());
         book.setAuthor(dto.getAuthor());
+        book.setIssuedBy(dto.isIssuedBy());
         book.createAt(LocalDateTime.now());
         return book;
     }
@@ -76,6 +80,6 @@ public class BookService {
     }
 
     private CreateBookRepositoryDto mapToDto(Book book) {
-        return new CreateBookRepositoryDto(book.getId(), book.getTitle(), book.getAuthor());
+        return new CreateBookRepositoryDto(book.getId(), book.getTitle(), book.getAuthor(), book.getIssuedBy());
     }
 }
