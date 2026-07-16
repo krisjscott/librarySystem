@@ -27,4 +27,16 @@ class AppTest {
         mockMvc.perform(get("/api/books/999"))
                .andExpect(status().isNotFound());
     }
+
+    @Test
+    void whenGetAllUsers_thenStatus200() throws Exception {
+        mockMvc.perform(get("/api/user"))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void whenGetUserByInvalid_thenStatus404() throws Exception {
+        mockMvc.perform(get("/api/user/999"))
+                .andExpect(status().isNotFound());
+    }
 }
