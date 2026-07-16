@@ -1,7 +1,7 @@
 package org.example.controller;
 
 import org.example.Dto.CreateBookRepositoryDto;
-import org.example.Model.Book;
+import org.example.Entity.Book;
 import org.example.Service.BookService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -29,6 +29,11 @@ public class BookController {
     @GetMapping("/author/{author}")
     public Book findByAuthor(@PathVariable String author) {
         return bookService.findBookByAuthor(author);
+    }
+
+    @GetMapping("/{title}/issue")
+    public Boolean checkIfIssueOrNot(@PathVariable String title) {
+        return bookService.ifIssued(title);
     }
 
     @GetMapping("/{id}")
