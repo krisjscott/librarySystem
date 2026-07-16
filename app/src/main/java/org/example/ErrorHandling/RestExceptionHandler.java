@@ -41,9 +41,9 @@ public class RestExceptionHandler {
                 .body(exceptionResponseDto);
     }
 
-    @ExceptionHandler(DuplicateResouceException.class)
-    public ResponseEntity<ExceptionResponseDto> DuplicareResourceException(
-            DuplicateResouceException ex, HttpServletRequest request){
+    @ExceptionHandler(DuplicateResourceException.class)
+    public ResponseEntity<ExceptionResponseDto> DuplicateResourceException(
+            DuplicateResourceException ex, HttpServletRequest request){
         ExceptionResponseDto exceptionResponseDto = new ExceptionResponseDto(
                 LocalDateTime.now(),
                 HttpStatus.CONFLICT.value(),
@@ -54,6 +54,48 @@ public class RestExceptionHandler {
 
         return ResponseEntity
                 .status(HttpStatus.CONFLICT)
+                .body(exceptionResponseDto);
+    }
+
+    @ExceptionHandler(BookIdMissingException.class)
+    public ResponseEntity<ExceptionResponseDto> handleBookIdMissingException(BookIdMissingException ex, HttpServletRequest request){
+        ExceptionResponseDto exceptionResponseDto = new ExceptionResponseDto(
+                LocalDateTime.now(),
+                HttpStatus.NOT_FOUND.value(),
+                HttpStatus.NOT_FOUND.getReasonPhrase(),
+                ex.getMessage(),
+                request.getRequestURI()
+        );
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(exceptionResponseDto);
+    }
+
+    @ExceptionHandler(UserIdMissingException.class)
+    public ResponseEntity<ExceptionResponseDto> UserIdMissingException(UserIdMissingException ex, HttpServletRequest request){
+        ExceptionResponseDto exceptionResponseDto = new ExceptionResponseDto(
+                LocalDateTime.now(),
+                HttpStatus.NOT_FOUND.value(),
+                HttpStatus.NOT_FOUND.getReasonPhrase(),
+                ex.getMessage(),
+                request.getRequestURI()
+        );
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(exceptionResponseDto);
+    }
+
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<ExceptionResponseDto> handleUserNotFoundException(UserNotFoundException ex, HttpServletRequest request){
+        ExceptionResponseDto exceptionResponseDto = new ExceptionResponseDto(
+                LocalDateTime.now(),
+                HttpStatus.NOT_FOUND.value(),
+                HttpStatus.NOT_FOUND.getReasonPhrase(),
+                ex.getMessage(),
+                request.getRequestURI()
+        );
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
                 .body(exceptionResponseDto);
     }
 
